@@ -14,7 +14,7 @@ module.exports = (() => {
         },
       ],
       version: "1.0.0",
-      description: "Replace word with another in all text.",
+      description: "Replaces specific word with another in messages.",
     },
     defaultConfig: [
       {
