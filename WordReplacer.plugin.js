@@ -1,6 +1,7 @@
 /**
  * @name WordReplacer
  * @authorLink https://github.com/toasthater
+ * @source https://github.com/toasthater/WordRreplacer/blob/main/WordReplacer.plugin.js
  */
 
 module.exports = (() => {
