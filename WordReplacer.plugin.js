@@ -8,9 +8,13 @@ module.exports = (() => {
   const config = {
     info: {
       name: "WordReplacer",
-      author: "ToastHater",
+      authors: [
+        {
+          name: "ToastHater",
+        },
+      ],
       version: "1.0.0",
-      description: "Replaces specific word with another in incoming messages.",
+      description: "Replace word with another in all text.",
     },
     defaultConfig: [
       {
