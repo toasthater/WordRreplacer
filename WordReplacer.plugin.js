@@ -374,10 +374,9 @@ module.exports = (() => {
             }
 
             handleText(text) {
-              text = text.replaceAll(
-                this.settings.general.wordFind,
-                this.settings.general.wordReplace
-              );
+              var regEx = new RegExp(this.settings.general.wordFind, "ig");
+
+              text = text.replace(regEx, this.settings.general.wordReplace);
 
               return text;
             }
