@@ -13,7 +13,7 @@ module.exports = (() => {
           name: "ToastHater",
         },
       ],
-      version: "1.0.0",
+      version: "2.0.0",
       description: "Replaces specific word with another in messages.",
     },
     defaultConfig: [
@@ -94,7 +94,8 @@ module.exports = (() => {
       }
     : (([Plugin, Api]) => {
         const plugin = (Plugin, Api) => {
-          const { PluginUtilities, WebpackModules, Patcher } = Api;
+          const { PluginUtilities, WebpackModules, Patcher, DiscordModules } =
+            Api;
 
           class StripInvalidTrailingEncoding {
             /**
@@ -341,32 +342,24 @@ module.exports = (() => {
             }
 
             onStart() {
-              const msgModule = WebpackModules.find(
-                (e) =>
-                  e?.default?.toString().indexOf("childrenMessageContent") > -1
-              );
-              Patcher.before(msgModule, "default", (_, args) => {
-                for (const item of args) {
-                  if (item.childrenMessageContent) {
-                    const msg = item.childrenMessageContent;
-                    if (this.settings.general.wordEnable) {
-                      if (
-                        msg.props &&
-                        msg.props.content &&
-                        Symbol.iterator in msg.props.content
-                      ) {
-                        if (
-                          msg.props.content[0] instanceof String ||
-                          typeof msg.props.content[0] === "string"
-                        ) {
-                          const newText = this.handleText(msg.props.content[0]);
-                          msg.props.content[0] = newText;
-                        }
+              const channelId =
+                DiscordModules.SelectedChannelStore.getChannelId();
+              Patcher.after(
+                DiscordModules.MessageStore,
+                "getMessages",
+                (_, channelId, messages) => {
+                  for (const message of messages._array) {
+                    if (message && message.content) {
+                      // modify the message content here
+                      if (this.settings.general.wordEnable) {
+                        const newText = this.handleText(message.content);
+                        message.content = newText;
                       }
                     }
                   }
+                  return messages;
                 }
-              });
+              );
             }
 
             onStop() {
