@@ -367,9 +367,14 @@ module.exports = (() => {
             }
 
             handleText(text) {
-              var regEx = new RegExp(this.settings.general.wordFind, "ig");
+              var re = new RegExp(
+                String.raw`(?<!https?:\/\/\S*)\b${this.settings.general.wordFind}.*?`,
+                "ig"
+              );
 
-              text = text.replace(regEx, this.settings.general.wordReplace);
+              if (typeof text === "string") {
+                text = text.replace(re, this.settings.general.wordReplace);
+              }
 
               return text;
             }
